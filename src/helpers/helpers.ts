@@ -18,3 +18,10 @@ export const catchError = (e: unknown) => {
     throw new Error('Something went wrong!');
   }
 };
+
+export const fetchData = async <T, U>(func: (arg: U) => Promise<T>, value: U) => {
+  if (value) {
+    return func(value);
+  }
+  return Promise.resolve();
+};
