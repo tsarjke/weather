@@ -1,3 +1,6 @@
+import { Location } from '@/typings/typings';
+import { ref, Ref } from 'vue';
+
 export const isEventOutside = (element: HTMLElement, target: Node | null): boolean => {
   // if there is no target, then the click was outside the component
   if (!target) return true;
@@ -19,9 +22,32 @@ export const catchError = (e: unknown) => {
   }
 };
 
-export const fetchData = async <T, U>(func: (arg: U) => Promise<T>, value: U) => {
-  if (value) {
-    return func(value);
-  }
-  return Promise.resolve();
+export const getOptionsFromLocations = (loc: Location[]) => loc.map(({
+  name, region, country, lat, lon,
+}) => ({ text: `${name}${region && ` - ${region}`} - ${country}`, value: `${lat},${lon}` }));
+
+export const fetchData = <T>(callback: (...args: T[]) => unknown)
+  :[(...args: T[]) => void, Ref<boolean>, Ref<string>] => {
+  const error: Ref<string> = ref('');
+  const isLoading: Ref<boolean> = ref(false);
+  function setError(e: string) { error.value = e; }
+  function setIsLoading(value: boolean) { isLoading.value = value; }
+
+  const fetching = async (...args: T[]) => {
+    try {
+      setIsLoading(true);
+      setError('');
+      await callback(...args);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setError(e.message);
+      } else {
+        setError(String(e));
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return [fetching, isLoading, error];
 };

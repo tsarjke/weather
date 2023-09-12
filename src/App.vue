@@ -15,8 +15,8 @@ import {
 } from 'vue';
 import TextInput from '@/components/UI/TextInput/TextInput.vue';
 import { locationSearch, getForecast } from '@/services';
-import { Forecast, InputOption, Location } from '@/typings/typings';
-import { fetchData } from '@/helpers/helpers';
+import { Forecast, InputOption } from '@/typings/typings';
+import { fetchData, getOptionsFromLocations } from '@/helpers/helpers';
 
 export default defineComponent({
   name: 'App',
@@ -24,22 +24,23 @@ export default defineComponent({
     TextInput,
   },
   setup() {
-    const formattedList: Ref<InputOption[] | undefined> = ref([]);
+    const formattedList: Ref<InputOption[]> = ref([]);
     const selectedOption: Ref<InputOption | undefined> = ref();
     const forecast: Ref<Forecast | undefined> = ref();
 
-    const handleLocation = (loc: Location[]) => loc.map(({
-      name, region, country, lat, lon,
-    }) => ({ text: `${name}${region && ` - ${region}`} - ${country}`, value: `${lat},${lon}` }));
+    const [getLocations, isLocationLoading, locationError] = fetchData(
+      async (value: string) => {
+        if (value) {
+          formattedList.value = getOptionsFromLocations(await locationSearch(value));
+        }
+      },
+    );
 
-    const getLocations = async (value: string) => {
-      const res = await fetchData<Location[], string>(locationSearch, value);
-      formattedList.value = res ? handleLocation(res) : [];
-    };
-
-    const testForecast = async (value: string) => {
-      forecast.value = await fetchData<Forecast, string>(getForecast, value) as Forecast;
-    };
+    const [testForecast, isForecastLoading, forecastError] = fetchData(
+      async (value: string) => {
+        forecast.value = await getForecast(value);
+      },
+    );
 
     watch(selectedOption, (option: InputOption | undefined) => {
       testForecast(String(option?.value));
@@ -89,7 +90,7 @@ export default defineComponent({
       color: #BFBFD4;
       text-align: center;
       font-size: 1.6rem;
-      line-height: 2rem; /* 19.6px */
+      line-height: 2rem;
     }
   }
 }
