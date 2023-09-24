@@ -11,7 +11,7 @@
                @focus="setFocusAndUpdate"/>
       </label>
       <div v-else class="dropdown__input" @click="deselectItem" @keydown.enter="deselectItem">{{
-          selectedValue.text
+          placeholder
         }}
       </div>
       <span v-if="inputValue || selectedValue" class="dropdown__reset"
@@ -36,7 +36,7 @@
 import {
   computed, defineComponent, onMounted, onUnmounted, ref, Ref, watch, nextTick,
 } from 'vue';
-import { isEventOutside } from '@/helpers/helpers';
+import { isEventOutside } from '@/helpers';
 import { InputOption } from '@/typings/typings';
 
 export default defineComponent({
@@ -175,6 +175,7 @@ export default defineComponent({
 <style lang="scss">
 .dropdown {
   position: relative;
+  z-index: 100;
   width: 100%;
 
   &__form {
@@ -184,10 +185,10 @@ export default defineComponent({
   &__input {
     cursor: text;
     width: 100%;
-    padding: 20px;
+    padding: 1.5rem 2rem;
     border-radius: 8px;
     background: #1E1E29;
-    font-size: 2rem;
+    font-size: 1.6rem;
     color: #a8a8bb;
     line-height: 2.2rem;
     text-transform: capitalize;
@@ -214,9 +215,11 @@ export default defineComponent({
   &__list-item {
     display: flex;
     align-items: center;
+    cursor: pointer;
     color: #FAFAFA;
     padding: 0 2rem;
     font-size: 1.6rem;
+    line-height: 2rem;
     background: #3B3B54;
 
     &:first-child {

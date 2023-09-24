@@ -1,5 +1,5 @@
 import axios from '@/services/axios/axois';
-import { catchError } from '@/helpers/helpers';
+import { catchError } from '@/helpers';
 import { Location } from '@/typings/typings';
 
 export default async (searchStr: string) : Promise<Location[]> => {

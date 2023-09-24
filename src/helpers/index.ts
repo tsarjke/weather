@@ -51,3 +51,14 @@ export const fetchData = <T>(callback: (...args: T[]) => unknown)
 
   return [fetching, isLoading, error];
 };
+
+export const capitalizeFirstLetter = (s: string) => `${s[0].toUpperCase()}${s.slice(1)}`;
+
+export const getDateObject = (sec: number | undefined, timezone = '') => {
+  const day = capitalizeFirstLetter(new Date((sec || 0) * 1000).toLocaleString('default', { weekday: 'long', timeZone: `${timezone}` }));
+  const date = new Date((sec || 0) * 1000).toLocaleDateString('default', { timeZone: `${timezone}` });
+  const time = new Date((sec || 0) * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: `${timezone}` });
+  return ({
+    day, date, time,
+  });
+};
