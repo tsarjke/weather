@@ -1,12 +1,24 @@
 <template>
-  <div class="wrapper">
-    <div class="greeting">
-      <h1 class="greeting__title">Welcome to <span class="greeting__highlight">Weather App</span>
+  <section class="main" :class="{'initial': !selectedOption}">
+    <div v-if="!selectedOption" class="greeting">
+      <h1 class="greeting__title">
+        Welcome to <span class="greeting__highlight">Weather App</span>
       </h1>
       <p class="greeting__subtitle">Choose a location to see the weather forecast</p>
     </div>
     <TextInput v-model="selectedOption" :list="formattedList" @inputValue="getLocations"/>
-  </div>
+    <div v-if="selectedOption" class="forecast">
+      <LoaderComponent v-if="isForecastLoading" class="loader"/>
+      <div v-else-if="forecastError">{{ forecastError }}</div>
+      <CurrentWeatherCard v-else :data="forecast"/>
+    </div>
+  </section>
+  <section v-if="selectedOption && !isForecastLoading && !forecastError">
+    <CurrentWeatherInfo :data="forecast?.current"/>
+  </section>
+  <section v-if="selectedOption && !isForecastLoading && !forecastError">
+    <ForecastCard :data="forecast?.forecast.forecastday"/>
+  </section>
 </template>
 
 <script lang="ts">
@@ -14,13 +26,21 @@ import {
   defineComponent, ref, Ref, watch,
 } from 'vue';
 import TextInput from '@/components/UI/TextInput/TextInput.vue';
+import CurrentWeatherCard from '@/components/CurrentWeatherCard/CurrentWeatherCard.vue';
+import CurrentWeatherInfo from '@/components/CurrentWeatherInfo/CurrentWeatherInfo.vue';
+import ForecastCard from '@/components/ForecastCard/ForecastCard.vue';
+import LoaderComponent from '@/components/UI/Loader/Loader.vue';
 import { locationSearch, getForecast } from '@/services';
 import { Forecast, InputOption } from '@/typings/typings';
-import { fetchData, getOptionsFromLocations } from '@/helpers/helpers';
+import { fetchData, getOptionsFromLocations } from '@/helpers';
 
 export default defineComponent({
   name: 'App',
   components: {
+    ForecastCard,
+    CurrentWeatherInfo,
+    LoaderComponent,
+    CurrentWeatherCard,
     TextInput,
   },
   setup() {
@@ -43,7 +63,9 @@ export default defineComponent({
     );
 
     watch(selectedOption, (option: InputOption | undefined) => {
-      testForecast(String(option?.value));
+      if (option?.value) {
+        testForecast(String(option?.value));
+      }
     });
 
     return {
@@ -51,6 +73,8 @@ export default defineComponent({
       selectedOption,
       getLocations,
       forecast,
+      isForecastLoading,
+      forecastError,
     };
   },
 });
@@ -58,18 +82,31 @@ export default defineComponent({
 
 <style lang="scss">
 #app {
-  padding: 3.2rem;
+  padding: 1.5rem;
   height: 100%;
   background: url("@/assets/img/background_dark.jpg");
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
-  .wrapper {
-    height: 50%;
+  .main {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
-    align-items: center;
+    gap: 1rem;
     justify-content: flex-end;
+  }
+
+  .main.initial {
+    justify-content: flex-end;
+    gap: 3rem;
+    height: 50%;
+  }
+
+  section:not(.initial) {
+    background: #16161F;
+    border-radius: 1.2rem;
+    padding: 1rem;
   }
 
   .greeting {
