@@ -64,19 +64,21 @@ export default defineComponent({
     const selectedValue = ref(props.modelValue);
     const focus = ref(false);
     const inputValue = ref('');
-    const optionHeight = ref(5);
+    const optionHeight = ref(4);
     const padding = 2;
     const numberOfVisibleOptions = ref(0);
 
+    // is option contain input value to be visible
     const isItemVisible = (item: InputOption): boolean => {
       if (!item || !item.text) return false;
-      return !!(inputValue.value && item.text.toLowerCase().search(new RegExp(`${inputValue.value}`, 'i')) === 0);
+      return !!(inputValue.value && item.text.search(new RegExp(`${inputValue.value.replace('-', ' ')}`, 'i')) === 0);
     };
 
+    // return array of visible options (to show it under input element)
     const filteredVisibleList = computed(() => props.list
       .filter((item: InputOption) => isItemVisible(item)));
-      // .slice(0, numberOfVisibleOptions.value));
 
+    // cleaning data after focusing on another element and returning the initial value
     const dropdownBlurHandler = (event: MouseEvent) => {
       const component = componentRef.value;
       if (isEventOutside(component as HTMLElement, event.target as Node)) {
@@ -86,6 +88,7 @@ export default defineComponent({
       }
     };
 
+    // return number of visible options according to page characteristics (height, position, etc.)
     const calculateNumberOfVisibleOptions = () => {
       const listElement = listRef.value;
       if (listElement) {
@@ -125,32 +128,39 @@ export default defineComponent({
       }
     };
 
+    // recalculating of number o visible options after list element updating
     watch(listRef, calculateNumberOfVisibleOptions);
 
+    // emitting value on input value changing
     watch(inputValue, (val) => {
       context.emit('inputValue', val);
     });
 
+    // cleaning after selecting an option and updating modelValue
     const selectItem = (item: InputOption | undefined) => {
       inputValue.value = '';
       selectedValue.value = item;
       context.emit('update:modelValue', item);
     };
 
+    // input cleaning for the new iteration of the search
     const deselectItem = () => {
       selectedValue.value = undefined;
       nextTick(() => (inputRef.value as HTMLInputElement).focus());
     };
 
+    // setting the focus value to true for the possibility of a list of options
     const setFocusAndUpdate = () => {
       focus.value = true;
-      context.emit('inputValue', inputValue.value);
+      context.emit('inputValue', inputValue.value.replace('-', ' '));
     };
 
+    // setting another element blur handler on mounting
     onMounted(() => {
       document.body.addEventListener('mousedown', dropdownBlurHandler);
     });
 
+    // cleaning after removal from the page
     onUnmounted(() => {
       document.body.removeEventListener('mousedown', dropdownBlurHandler);
     });
@@ -241,6 +251,10 @@ export default defineComponent({
 
     &:not(:last-child) {
       border-bottom: 1px solid #1E1E29;
+    }
+
+    @media (min-width: 1280px) {
+      font-size: 1.4rem;
     }
   }
 

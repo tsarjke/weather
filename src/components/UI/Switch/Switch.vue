@@ -1,7 +1,8 @@
 <template>
-  <label class="switch">
+  <label class="switch" for="switch-btn">
     <input type="checkbox"
            class="switch__button"
+           id="switch-btn"
            :class="[isDark ? 'dark' : 'light']"
            :checked="isDark"
            :disabled="disabled"
@@ -13,7 +14,7 @@
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-  name: 'Switch',
+  name: 'SwitchButton',
   props: {
     mode: {
       type: String,
@@ -26,18 +27,18 @@ export default defineComponent({
       default: false,
     },
   },
-  setup(props) {
+  setup(props, context) {
     const isDark = ref(props.mode === 'dark');
+
+    const switchTheme = (e: Event) => {
+      isDark.value = (e.target as HTMLInputElement).checked;
+      context.emit('change', isDark.value ? 'dark' : 'light');
+    };
 
     return {
       isDark,
+      switchTheme,
     };
-  },
-  methods: {
-    switchTheme(e: Event) {
-      this.isDark = (e.target as HTMLInputElement).checked;
-      this.$emit('change', this.isDark ? 'dark' : 'light');
-    },
   },
 });
 </script>

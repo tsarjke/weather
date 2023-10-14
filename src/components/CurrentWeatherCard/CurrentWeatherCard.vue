@@ -52,6 +52,7 @@ export default defineComponent({
       feelsLike: props.data?.current?.feelslike_c,
     }));
 
+    // date return in convenient form from non-convenient timestamp in seconds
     const currentDate = computed(
       () => getDateObject(location.value?.localtime_epoch, location.value?.tz_id),
     );
@@ -69,13 +70,15 @@ export default defineComponent({
 <style lang="scss">
 .weather-card {
   position: relative;
+  padding: 1rem;
 
   &__content {
+    height: 100%;
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
   }
 
   &__bg {
@@ -90,6 +93,10 @@ export default defineComponent({
       height: 100%;
       border-radius: 1rem;
     }
+  }
+
+  @media (min-width: 1024px) {
+    padding: 3rem;
   }
 }
 
@@ -109,12 +116,25 @@ export default defineComponent({
   &__subtitle {
     font-size: 1.4rem;
   }
+
+  @media (min-width: 1024px) {
+    flex: 1 0 auto;
+
+    &__title {
+      font-size: 2.4rem;
+    }
+
+    &__subtitle {
+      font-size: 1.8rem;
+    }
+  }
 }
 
 .temp {
   align-items: center;
 
   &__value {
+    align-self: flex-end;
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
@@ -139,12 +159,17 @@ export default defineComponent({
       width: 8rem;
     }
   }
+
+  @media (min-width: 1024px) {
+    &__current {
+      font-size: 6rem;
+    }
+  }
 }
 
 .card {
   display: flex;
   justify-content: space-between;
-  padding: 1rem;
   gap: 0.5rem;
   color: #FAFAFA;
 }

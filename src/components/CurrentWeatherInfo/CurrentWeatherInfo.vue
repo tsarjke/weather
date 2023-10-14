@@ -62,6 +62,7 @@ export default defineComponent({
 
 <style lang="scss">
 .weather-info {
+  width: 100%;
 
   &__item {
     display: flex;

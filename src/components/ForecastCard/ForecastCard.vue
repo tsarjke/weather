@@ -31,7 +31,7 @@ export default defineComponent({
         ...item,
         weekDay: capitalizeFirstLetter(new Date(item.date_epoch * 1000).toLocaleString('default', { weekday: 'short' })),
         // eslint-disable-next-line global-require,import/no-dynamic-require
-        iconPath: require(`@/assets/img/icons/weather/0/${item.day.condition.code}.png`),
+        iconPath: require(`@/assets/img/icons/weather/1/${item.day.condition.code}.png`),
       })));
 
     return {
@@ -43,6 +43,7 @@ export default defineComponent({
 
 <style lang="scss">
 .forecast-card {
+  width: 100%;
 
   &__list {
     display: flex;

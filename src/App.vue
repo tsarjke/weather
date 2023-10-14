@@ -1,24 +1,33 @@
 <template>
-  <section class="main" :class="{'initial': !selectedOption}">
-    <div v-if="!selectedOption" class="greeting">
-      <h1 class="greeting__title">
-        Welcome to <span class="greeting__highlight">Weather App</span>
-      </h1>
-      <p class="greeting__subtitle">Choose a location to see the weather forecast</p>
+  <LoaderComponent v-if="isForecastLoading" class="loader content"/>
+  <div class="error content" v-else-if="forecastError">{{ forecastError }}</div>
+  <div v-else class="content" :class="{'initial': !selectedOption}">
+    <section class="main" :class="{'initial': !selectedOption}">
+      <div v-if="!selectedOption" class="greeting">
+        <h1 class="greeting__title">
+          Welcome to <span class="greeting__highlight">Weather App</span>
+        </h1>
+        <p class="greeting__subtitle">Choose a location to see the weather forecast</p>
+      </div>
+      <TextInput v-model="selectedOption"
+                 :list="formattedList"
+                 @inputValue="getLocationsAndCleanPrevData"/>
+      <div v-if="selectedOption" class="forecast">
+        <CurrentWeatherCard class="weather-card" :data="forecast"/>
+      </div>
+    </section>
+    <div class="info" v-if="selectedOption && !isForecastLoading && !forecastError">
+      <section>
+        <CurrentWeatherInfo :data="forecast?.current"/>
+      </section>
+      <section>
+        <ForecastCard :data="forecast?.forecast.forecastday"/>
+      </section>
     </div>
-    <TextInput v-model="selectedOption" :list="formattedList" @inputValue="getLocations"/>
-    <div v-if="selectedOption" class="forecast">
-      <LoaderComponent v-if="isForecastLoading" class="loader"/>
-      <div v-else-if="forecastError">{{ forecastError }}</div>
-      <CurrentWeatherCard v-else :data="forecast"/>
-    </div>
-  </section>
-  <section v-if="selectedOption && !isForecastLoading && !forecastError">
-    <CurrentWeatherInfo :data="forecast?.current"/>
-  </section>
-  <section v-if="selectedOption && !isForecastLoading && !forecastError">
-    <ForecastCard :data="forecast?.forecast.forecastday"/>
-  </section>
+  </div>
+  <footer>
+    <PageFooter/>
+  </footer>
 </template>
 
 <script lang="ts">
@@ -30,6 +39,7 @@ import CurrentWeatherCard from '@/components/CurrentWeatherCard/CurrentWeatherCa
 import CurrentWeatherInfo from '@/components/CurrentWeatherInfo/CurrentWeatherInfo.vue';
 import ForecastCard from '@/components/ForecastCard/ForecastCard.vue';
 import LoaderComponent from '@/components/UI/Loader/Loader.vue';
+import PageFooter from '@/components/Footer/Footer.vue';
 import { locationSearch, getForecast } from '@/services';
 import { Forecast, InputOption } from '@/typings/typings';
 import { fetchData, getOptionsFromLocations } from '@/helpers';
@@ -37,6 +47,7 @@ import { fetchData, getOptionsFromLocations } from '@/helpers';
 export default defineComponent({
   name: 'App',
   components: {
+    PageFooter,
     ForecastCard,
     CurrentWeatherInfo,
     LoaderComponent,
@@ -50,11 +61,17 @@ export default defineComponent({
 
     const [getLocations, isLocationLoading, locationError] = fetchData(
       async (value: string) => {
-        if (value) {
-          formattedList.value = getOptionsFromLocations(await locationSearch(value));
-        }
+        formattedList.value = getOptionsFromLocations(await locationSearch(value));
       },
     );
+
+    const getLocationsAndCleanPrevData = (value: string) => {
+      if (value) {
+        getLocations(value);
+      } else {
+        formattedList.value = [];
+      }
+    };
 
     const [testForecast, isForecastLoading, forecastError] = fetchData(
       async (value: string) => {
@@ -71,7 +88,7 @@ export default defineComponent({
     return {
       formattedList,
       selectedOption,
-      getLocations,
+      getLocationsAndCleanPrevData,
       forecast,
       isForecastLoading,
       forecastError,
@@ -83,24 +100,73 @@ export default defineComponent({
 <style lang="scss">
 #app {
   padding: 1.5rem;
-  height: 100%;
+  min-height: 100%;
   background: url("@/assets/img/background_dark.jpg");
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
+
+  .content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &.initial {
+      justify-content: center;
+    }
+
+    @media (min-width: 1024px) {
+      flex-direction: row;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      @media (min-width: 1024px) {
+        width: 40%;
+
+        section {
+          flex: 1 0 auto;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
 
   .main {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: flex-end;
-  }
 
-  .main.initial {
-    justify-content: flex-end;
-    gap: 3rem;
-    height: 50%;
+    &.initial {
+      gap: 3rem;
+      transform: translateY(-50%);
+    }
+
+    .forecast {
+      flex: 1 0 auto;
+
+      .weather-card {
+        height: 100%;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      justify-content: flex-start;
+      width: 60%;
+      &.initial {
+        transform: translateY(0);
+        justify-content: center;
+        width: 100%;
+        padding: 0 25%;
+      }
+    }
   }
 
   section:not(.initial) {

@@ -1,6 +1,7 @@
 import { Location } from '@/typings/typings';
 import { ref, Ref } from 'vue';
 
+// check whether the target is inside the element (recursively)
 export const isEventOutside = (element: HTMLElement, target: Node | null): boolean => {
   // if there is no target, then the click was outside the component
   if (!target) return true;
@@ -12,6 +13,7 @@ export const isEventOutside = (element: HTMLElement, target: Node | null): boole
   return isEventOutside(element, (target as HTMLElement).parentElement);
 };
 
+// error handler
 export const catchError = (e: unknown) => {
   if (typeof e === 'string') {
     throw new Error();
@@ -22,10 +24,12 @@ export const catchError = (e: unknown) => {
   }
 };
 
+// get options (visible text and value) for search input element from locations array
 export const getOptionsFromLocations = (loc: Location[]) => loc.map(({
   name, region, country, lat, lon,
 }) => ({ text: `${name}${region && ` - ${region}`} - ${country}`, value: `${lat},${lon}` }));
 
+// server request template, which return ready method, loading and error statuses
 export const fetchData = <T>(callback: (...args: T[]) => unknown)
   :[(...args: T[]) => void, Ref<boolean>, Ref<string>] => {
   const error: Ref<string> = ref('');
@@ -52,8 +56,10 @@ export const fetchData = <T>(callback: (...args: T[]) => unknown)
   return [fetching, isLoading, error];
 };
 
+// return string with capitalized first letter
 export const capitalizeFirstLetter = (s: string) => `${s[0].toUpperCase()}${s.slice(1)}`;
 
+// return day, date and time according to timezone from timestamp (s, not ms)
 export const getDateObject = (sec: number | undefined, timezone = '') => {
   const day = capitalizeFirstLetter(new Date((sec || 0) * 1000).toLocaleString('default', { weekday: 'long', timeZone: `${timezone}` }));
   const date = new Date((sec || 0) * 1000).toLocaleDateString('default', { timeZone: `${timezone}` });
