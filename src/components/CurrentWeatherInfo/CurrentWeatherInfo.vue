@@ -1,6 +1,6 @@
 <template>
   <div class="weather-info">
-    <ul>
+    <ul class="weather-info__list">
       <li v-for="item in currentCondition" :key="item.text" class="weather-info__item item">
         <div class="weather-info__icon">
           <img :src="item.icon" alt="item.text">
@@ -61,6 +61,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@/assets/style/mixins';
+
 .weather-info {
   width: 100%;
 
@@ -68,7 +70,7 @@ export default defineComponent({
     display: flex;
     gap: 1.2rem;
     align-items: center;
-    padding: 1rem;
+    @include adaptive-prop('padding', 1, 2.5);
 
     &:not(:last-child) {
       border-bottom: 1px solid #1C1C27;
@@ -88,13 +90,13 @@ export default defineComponent({
   &__text {
     flex: 1 0 auto;
     color: #BFBFD4;
-    font-size: 1.4rem;
+    @include adaptive-prop('font-size', 1.4, 2);
     font-weight: 700;
   }
 
   &__value {
     color: #FAFAFA;
-    font-size: 1.6rem;
+    @include adaptive-prop('font-size', 1.6, 2.8);
   }
 }
 

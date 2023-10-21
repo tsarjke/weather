@@ -42,6 +42,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@/assets/style/mixins';
+
 .forecast-card {
   width: 100%;
 
@@ -54,17 +56,18 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     align-items: center;
+    @include adaptive-prop('padding', 1, 2);
   }
 
   &__weekday {
     color: #BFBFD4;
-    font-size: 1.4rem;
+    @include adaptive-prop('font-size', 1.4, 2);
     font-weight: 700;
   }
 
   &__icon {
-    width: 6rem;
-    height: 6rem;
+    height: 6.5vw;
+    width: 6.5vw;
 
     img {
       width: 100%;
@@ -73,7 +76,7 @@ export default defineComponent({
   }
 
   &__temp {
-    font-size: 1.4rem;
+    @include adaptive-prop('font-size', 1.4, 2);
     display: flex;
     flex-direction: column;
     align-items: center;

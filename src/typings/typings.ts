@@ -42,10 +42,14 @@ export type ForecastForDay = {
   }
 }
 
-export type Forecast = {
+export type CurrentWeatherData = {
   current: CurrentWeather;
+  location: Location;
+}
+
+export type Forecast =
+  CurrentWeatherData & {
   forecast: {
     forecastday: ForecastForDay[]
   };
-  location: Location;
 }

@@ -64,7 +64,7 @@ export default defineComponent({
     const selectedValue = ref(props.modelValue);
     const focus = ref(false);
     const inputValue = ref('');
-    const optionHeight = ref(4);
+    const optionHeight = ref(5);
     const padding = 2;
     const numberOfVisibleOptions = ref(0);
 
@@ -183,6 +183,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@/assets/style/mixins';
+
 .dropdown {
   position: relative;
   z-index: 100;
@@ -193,12 +195,12 @@ export default defineComponent({
   }
 
   &__input {
+    @include adaptive-prop('font-size', 1.6, 2);
     cursor: text;
     width: 100%;
     padding: 1.5rem 2rem;
     border-radius: 8px;
     background: #1E1E29;
-    font-size: 1.6rem;
     color: #a8a8bb;
     line-height: 2.2rem;
     text-transform: capitalize;
@@ -251,10 +253,6 @@ export default defineComponent({
 
     &:not(:last-child) {
       border-bottom: 1px solid #1E1E29;
-    }
-
-    @media (min-width: 1280px) {
-      font-size: 1.4rem;
     }
   }
 

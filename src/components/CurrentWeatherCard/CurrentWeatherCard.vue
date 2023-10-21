@@ -31,13 +31,13 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { Forecast } from '@/typings/typings';
+import { CurrentWeatherData } from '@/typings/typings';
 import { getDateObject } from '@/helpers';
 
 export default defineComponent({
   name: 'CurrentWeatherCard',
   props: {
-    data: Object as () => Forecast,
+    data: Object as () => CurrentWeatherData,
   },
   setup(props) {
     const location = computed(() => props.data?.location);
@@ -68,6 +68,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@/assets/style/mixins';
+
 .weather-card {
   position: relative;
   padding: 1rem;
@@ -95,7 +97,7 @@ export default defineComponent({
     }
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 1023px) {
     padding: 3rem;
   }
 }
@@ -109,24 +111,22 @@ export default defineComponent({
   }
 
   &__title {
-    font-size: 1.6rem;
+    @include adaptive-prop('font-size', 1.6, 2.8);
     font-weight: 700;
   }
 
   &__subtitle {
-    font-size: 1.4rem;
+    @include adaptive-prop('font-size', 1.4, 2);
   }
 
-  @media (min-width: 1024px) {
+  &__time {
+    h4 {
+      @include adaptive-prop('font-size', 1.4, 2.8);
+    }
+  }
+
+  @media (min-width: 1023px) {
     flex: 1 0 auto;
-
-    &__title {
-      font-size: 2.4rem;
-    }
-
-    &__subtitle {
-      font-size: 1.8rem;
-    }
   }
 }
 
@@ -141,11 +141,11 @@ export default defineComponent({
   }
 
   &__current {
-    font-size: 4.6rem;
+    @include adaptive-prop('font-size', 4.6, 8);
   }
 
   &__feels-like {
-    font-size: 1.4rem;
+    @include adaptive-prop('font-size', 1.4, 2);
   }
 
   &__icon {
@@ -155,14 +155,12 @@ export default defineComponent({
 
     img {
       margin-top: -1rem;
-      height: 8rem;
-      width: 8rem;
+      height: 7vw;
+      width: 7vw;
     }
-  }
 
-  @media (min-width: 1024px) {
-    &__current {
-      font-size: 6rem;
+    p {
+      @include adaptive-prop('font-size', 1, 1.6);
     }
   }
 }

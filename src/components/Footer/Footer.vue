@@ -39,6 +39,10 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     gap: 2rem;
+
+    @media (min-width: 1023px) {
+      gap: 3rem;
+    }
   }
 
   &__link {
@@ -53,6 +57,11 @@ export default defineComponent({
     img {
       width: 100%;
       height: 100%;
+    }
+
+    @media (min-width: 1023px) {
+      width: 4.5rem;
+      height: 4.5rem;
     }
   }
 }
