@@ -6,8 +6,9 @@
                type="text"
                ref="inputRef"
                id="search-input"
-               v-model.trim="inputValue"
+               v-model.trim="inputText"
                :placeholder="placeholder"
+               @input="debouncedUpdate"
                @focus="setFocusAndUpdate"/>
       </label>
       <div v-else class="dropdown__input" @click="deselectItem" @keydown.enter="deselectItem">{{
@@ -64,9 +65,20 @@ export default defineComponent({
     const selectedValue = ref(props.modelValue);
     const focus = ref(false);
     const inputValue = ref('');
+    const inputText = ref('');
     const optionHeight = ref(5);
     const padding = 2;
     const numberOfVisibleOptions = ref(0);
+    let debounceTimeout: number;
+
+    // wait 500ms before updating to prevent multiple unnecessary requests
+    // (that may also go out of order)
+    const debouncedUpdate = () => {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        inputValue.value = inputText.value;
+      }, 500);
+    };
 
     // is option contain input value to be visible
     const isItemVisible = (item: InputOption): boolean => {
@@ -172,8 +184,10 @@ export default defineComponent({
       selectedValue,
       focus,
       inputValue,
+      inputText,
       filteredVisibleList,
       optionHeight,
+      debouncedUpdate,
       selectItem,
       deselectItem,
       setFocusAndUpdate,
