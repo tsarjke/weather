@@ -3,15 +3,15 @@
     <input type="checkbox"
            class="switch__button"
            id="switch-btn"
-           :class="[isDark ? 'dark' : 'light']"
-           :checked="isDark"
+           :class="[isDark ? 'light' : 'dark']"
+           :checked="!isDark"
            :disabled="disabled"
            @change="switchTheme"/>
   </label>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'SwitchButton',
@@ -28,11 +28,11 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const isDark = ref(props.mode === 'dark');
+    const isDark = computed(() => props.mode === 'dark');
 
     const switchTheme = (e: Event) => {
-      isDark.value = (e.target as HTMLInputElement).checked;
-      context.emit('change', isDark.value ? 'dark' : 'light');
+      e.stopPropagation();
+      context.emit('change', isDark.value ? 'light' : 'dark');
     };
 
     return {
@@ -91,7 +91,8 @@ export default defineComponent({
       width: calc(var(--height) * 0.75);
       height: calc(var(--height) * 0.75);
       border-radius: 50%;
-      transform: translate(calc(var(--button-end-position) + var(--height) * 0.03), calc(var(--height) * 0.04));
+      transform: translate(calc(var(--button-end-position) + var(--height) * 0.03),
+        calc(var(--height) * 0.04));
     }
 
     &.light:not([disabled]) {
@@ -101,7 +102,8 @@ export default defineComponent({
 
       &:after {
         background: var(--fg-color-light);
-        box-shadow: 0 2.6px 5.2px 0 #FFD0A5 inset, 0 -2.6px 5.2px 0 #FFA149 inset, 0 0 11.7px 0 rgba(255, 193, 135, 0.60), -3.9px 6.5px 5.2px 0 rgba(183, 183, 183, 0.35);
+        box-shadow: 0 2.6px 5.2px 0 #FFD0A5 inset, 0 -2.6px 5.2px 0 #FFA149 inset,
+        0 0 11.7px 0 rgba(255, 193, 135, 0.60), -3.9px 6.5px 5.2px 0 rgba(183, 183, 183, 0.35);
       }
     }
 
@@ -110,7 +112,8 @@ export default defineComponent({
 
       &:after {
         background-color: var(--fg-color-moon);
-        box-shadow: 0 2.6px 5.2px 0 #BFBFC0 inset, 0 -2.6px 5.2px 0 #FFF inset, -3.9px 0 19.5px 0 rgba(183, 183, 183, 0.31);
+        box-shadow: 0 2.6px 5.2px 0 #BFBFC0 inset, 0 -2.6px 5.2px 0 #FFF inset,
+        -3.9px 0 19.5px 0 rgba(183, 183, 183, 0.31);
       }
 
       &:before {

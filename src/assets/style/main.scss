@@ -1,5 +1,70 @@
 @import '@/assets/style/mixins';
 
+@font-face {
+  font-family: 'weather-info-icons';
+  src:  url('../fonts/weather-info-icons/font.eot?r0h18z');
+  src:  url('../fonts/weather-info-icons/font.eot?r0h18z#iefix') format('embedded-opentype'),
+  url('../fonts/weather-info-icons/font.ttf?r0h18z') format('truetype'),
+  url('../fonts/weather-info-icons/font.woff?r0h18z') format('woff'),
+  url('../fonts/weather-info-icons/font.svg?r0h18z#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  --info-color: #FAFAFA;
+
+  .icon-arrow:before {
+    content: "\e906";
+  }
+  .icon-cloud:before {
+    content: "\e901";
+  }
+  .icon-humidity:before {
+    content: "\e902";
+  }
+  .icon-precip:before {
+    content: "\e903";
+  }
+  .icon-wind-dir:before {
+    content: "\e904";
+  }
+  .icon-wind-speed:before {
+    content: "\e905";
+  }
+}
+
+:root.dark {
+  --color: #FAFAFA;
+  --highlight-color: #8FB2F5;
+  --minor-color: #BFBFD4;
+  --background-image: url("@/assets/img/app-bg/background_dark.jpg");
+  --background-color: #1E1E29;
+  --background-second-color: #3B3B54;
+  --background-third-color: #16161F;
+  --info-second-color: #BFBFD4;
+
+  :is(.icon-arrow, .icon-cloud, .icon-humidity, .icon-precip, .icon-wind-dir, .icon-wind-speed):before {
+    color: #FAFAFA;
+  }
+}
+
+:root.light {
+  --color: #0A0A0A;
+  --highlight-color: #fec223;
+  --minor-color: #3f3f3c;
+  --background-image: url("@/assets/img/app-bg/background_light.jpg");
+  --background-color: #FAFAFA;
+  --background-second-color: #97c2f8;
+  --background-third-color: #539cf5;
+  --info-second-color: #F0F0F0;
+
+  :is(.icon-arrow, .icon-cloud, .icon-humidity, .icon-precip, .icon-wind-dir, .icon-wind-speed):before {
+    color: #F0F0F0;
+  }
+}
+
 .content {
   flex: 1 0 auto;
   display: flex;
@@ -12,9 +77,16 @@
 
   &.initial {
     justify-content: center;
+  }
 
-    .content__main {
-      gap: 3rem;
+  &__main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: flex-end;
+
+    &.initial {
       transform: translateY(-50%);
 
       @media (min-width: 1023px) {
@@ -24,14 +96,6 @@
         padding: 0 25%;
       }
     }
-  }
-
-  &__main {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    justify-content: flex-end;
 
     @media (min-width: 1023px) {
       justify-content: flex-start;
@@ -64,7 +128,7 @@
   }
 
   section:not(.initial) {
-    background: #16161F;
+    background: var(--background-third-color);
     border-radius: 1.2rem;
     padding: 1rem;
   }
@@ -77,7 +141,7 @@
 .greeting {
   &__title {
     padding: 0.5rem 0;
-    color: #FAFAFA;
+    color: var(--color);
     text-align: center;
     @include adaptive-prop('font-size', 2.4, 3.6);
     font-weight: 700;
@@ -85,13 +149,32 @@
   }
 
   &__highlight {
-    color: #8FB2F5;
+    color: var(--highlight-color);
   }
 
   &__subtitle {
-    color: #BFBFD4;
+    color: var(--minor-color);
     text-align: center;
     @include adaptive-prop('font-size', 1.6, 1.8);
     line-height: 2rem;
+  }
+
+  &__control {
+    display: flex;
+    @include adaptive-prop('gap', 0.5, 2);
+
+    &.initial {
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+
+      .switch {
+        order: 0;
+      }
+    }
+
+    .switch {
+      order: 1;
+    }
   }
 }

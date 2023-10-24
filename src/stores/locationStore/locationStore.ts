@@ -9,15 +9,21 @@ export default defineStore('locationStore', () => {
 
   const locationOptions = computed(() => getOptionsFromLocations(locations.value));
 
+  const clearLocations = () => {
+    locations.value = [];
+  };
+
   const [getLocations, isLocationLoading, locationError] = fetchData(
     async (value: string) => {
       if (value) {
         locations.value = await locationSearch(value);
+      } else {
+        clearLocations();
       }
     },
   );
 
   return {
-    locationOptions, getLocations, isLocationLoading, locationError,
+    locationOptions, getLocations, clearLocations, isLocationLoading, locationError,
   };
 });

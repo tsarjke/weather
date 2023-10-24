@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export type Location = {
   name: string;
   region: string;
@@ -52,4 +54,9 @@ export type Forecast =
   forecast: {
     forecastday: ForecastForDay[]
   };
+}
+
+export enum ColorTheme {
+  dark = 'DARK',
+  light = 'LIGHT'
 }

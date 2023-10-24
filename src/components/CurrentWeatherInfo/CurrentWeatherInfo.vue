@@ -2,14 +2,12 @@
   <div class="weather-info">
     <ul class="weather-info__list">
       <li v-for="item in currentCondition" :key="item.text" class="weather-info__item item">
-        <div class="weather-info__icon">
-          <img :src="item.icon" alt="item.text">
+        <div class="weather-info__icon" :class="item.iconClass">
         </div>
         <p class="weather-info__text">{{ item.text }}</p>
-        <div v-if="item.iconValue">
-          <img :src="item.iconValue" :alt="item.value"
-               :style="{transform: `rotate(${item.value - 180}deg)`}">
-        </div>
+        <div v-if="item.iconValueClass"
+             :class="['weather-info__icon', item.iconValueClass]"
+             :style="{transform: `rotate(${item.value - 180}deg)`}"/>
         <p v-else class="weather-info__value">{{ item.value }}</p>
       </li>
     </ul>
@@ -34,22 +32,22 @@ export default defineComponent({
   setup(props) {
     const currentCondition = computed(() => [
       {
-        text: 'Precipitation (mm)', value: props.data?.precip_mm, icon: precipIcon,
+        text: 'Precipitation (mm)', value: props.data?.precip_mm, iconClass: 'icon-precip',
       },
       {
-        text: 'Wind speed (km/h)', value: props.data?.wind_kph, icon: windSpeedIcon,
+        text: 'Wind speed (km/h)', value: props.data?.wind_kph, iconClass: 'icon-wind-speed',
       },
       {
         text: 'Wind direction',
         value: props.data?.wind_degree,
-        icon: windDirIcon,
-        iconValue: windDirArrowIcon,
+        iconClass: 'icon-wind-dir',
+        iconValueClass: 'icon-arrow',
       },
       {
-        text: 'Humidity (%)', value: props.data?.humidity, icon: humidityIcon,
+        text: 'Humidity (%)', value: props.data?.humidity, iconClass: 'icon-humidity',
       },
       {
-        text: 'Cloud (%)', value: props.data?.cloud, icon: cloudIcon,
+        text: 'Cloud (%)', value: props.data?.cloud, iconClass: 'icon-cloud',
       },
     ]);
 
@@ -73,29 +71,24 @@ export default defineComponent({
     @include adaptive-prop('padding', 1, 2.5);
 
     &:not(:last-child) {
-      border-bottom: 1px solid #1C1C27;
+      border-bottom: 1px solid var(--background-second-color);
     }
   }
 
   &__icon {
-    width: 2.5rem;
-    height: 2.5rem;
-
-    img {
-      height: 100%;
-      width: 100%;
-    }
+    font-family: 'weather-info-icons';
+    font-size: 2rem;
   }
 
   &__text {
     flex: 1 0 auto;
-    color: #BFBFD4;
+    color: var(--info-second-color);
     @include adaptive-prop('font-size', 1.4, 2);
     font-weight: 700;
   }
 
   &__value {
-    color: #FAFAFA;
+    color: var(--info-color);
     @include adaptive-prop('font-size', 1.6, 2.8);
   }
 }

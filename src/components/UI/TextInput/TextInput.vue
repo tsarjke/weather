@@ -200,8 +200,8 @@ export default defineComponent({
     width: 100%;
     padding: 1.5rem 2rem;
     border-radius: 8px;
-    background: #1E1E29;
-    color: #a8a8bb;
+    background: var(--background-color);
+    color: var(--minor-color);
     line-height: 2.2rem;
     text-transform: capitalize;
   }
@@ -213,7 +213,7 @@ export default defineComponent({
     cursor: pointer;
     font-size: 2.5rem;
     transform: translateY(-50%);
-    color: #FAFAFA;
+    color: var(--color);
   }
 
   &__list {
@@ -228,11 +228,11 @@ export default defineComponent({
     display: flex;
     align-items: center;
     cursor: pointer;
-    color: #FAFAFA;
+    color: var(--color);
     padding: 0 2rem;
     font-size: 1.6rem;
     line-height: 2rem;
-    background: #3B3B54;
+    background: var(--background-second-color);
 
     &:first-child {
       border-radius: 0.8rem 0.8rem 0 0;
@@ -247,7 +247,7 @@ export default defineComponent({
     }
 
     &:hover {
-      background: #282838;
+      background: var(--background-color);
       cursor: pointer;
     }
 

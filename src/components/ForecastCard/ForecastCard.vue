@@ -60,7 +60,7 @@ export default defineComponent({
   }
 
   &__weekday {
-    color: #BFBFD4;
+    color: var(--info-second-color);
     @include adaptive-prop('font-size', 1.4, 2);
     font-weight: 700;
   }
@@ -83,11 +83,11 @@ export default defineComponent({
     gap: 0.5rem;
 
     &_max {
-      color: #FAFAFA;
+      color: var(--info-color);
     }
 
     &_min {
-      color: #7F7F98;
+      color: var(--info-second-color);
     }
   }
 }
