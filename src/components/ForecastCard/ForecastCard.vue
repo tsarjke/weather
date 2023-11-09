@@ -29,7 +29,7 @@ export default defineComponent({
     const forecastArray = computed(() => props.data
       ?.map((item) => ({
         ...item,
-        weekDay: capitalizeFirstLetter(new Date(item.date_epoch * 1000).toLocaleString('default', { weekday: 'short' })),
+        weekDay: capitalizeFirstLetter(new Date(item.date_epoch * 1000).toLocaleString('en-US', { weekday: 'short' })),
         // eslint-disable-next-line global-require,import/no-dynamic-require
         iconPath: require(`@/assets/img/icons/weather/1/${item.day.condition.code}.png`),
       })));

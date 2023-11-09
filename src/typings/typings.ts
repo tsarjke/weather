@@ -6,7 +6,6 @@ export type Location = {
   country: string;
   lat: number;
   lon: number;
-  id: number;
   tz_id: string;
   localtime_epoch: number;
 };
@@ -24,9 +23,7 @@ type Condition = {
 export type CurrentWeather = {
   cloud: number;
   feelslike_c: number;
-  feelslike_f: number;
   temp_c: number;
-  temp_f: number;
   is_day: 1 | 0;
   wind_kph: number;
   precip_mm: number;
@@ -57,6 +54,6 @@ export type Forecast =
 }
 
 export enum ColorTheme {
-  dark = 'DARK',
-  light = 'LIGHT'
+  dark = 'dark',
+  light = 'light'
 }

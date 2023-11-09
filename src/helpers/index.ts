@@ -61,7 +61,7 @@ export const capitalizeFirstLetter = (s: string) => `${s[0].toUpperCase()}${s.sl
 
 // return day, date and time according to timezone from timestamp (s, not ms)
 export const getDateObject = (sec: number | undefined, timezone = '') => {
-  const day = capitalizeFirstLetter(new Date((sec || 0) * 1000).toLocaleString('default', { weekday: 'long', timeZone: `${timezone}` }));
+  const day = capitalizeFirstLetter(new Date((sec || 0) * 1000).toLocaleString('en-US', { weekday: 'long', timeZone: `${timezone}` }));
   const date = new Date((sec || 0) * 1000).toLocaleDateString('default', { timeZone: `${timezone}` });
   const time = new Date((sec || 0) * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: `${timezone}` });
   return ({

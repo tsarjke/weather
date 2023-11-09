@@ -17,12 +17,6 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 import { CurrentWeather } from '@/typings/typings';
-import precipIcon from '@/assets/img/icons/condition/precip.svg';
-import windSpeedIcon from '@/assets/img/icons/condition/wind-speed.svg';
-import windDirIcon from '@/assets/img/icons/condition/wind-dir.svg';
-import humidityIcon from '@/assets/img/icons/condition/humidity.svg';
-import cloudIcon from '@/assets/img/icons/condition/cloud.svg';
-import windDirArrowIcon from '@/assets/img/icons/condition/arrow.svg';
 
 export default defineComponent({
   name: 'CurrentWeatherInfo',

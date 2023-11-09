@@ -3,8 +3,8 @@
     <input type="checkbox"
            class="switch__button"
            id="switch-btn"
-           :class="[isDark ? 'light' : 'dark']"
-           :checked="!isDark"
+           :class="[isDark ? 'dark' : 'light']"
+           :checked="isDark"
            :disabled="disabled"
            @change="switchTheme"/>
   </label>
@@ -12,6 +12,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
+import { ColorTheme } from '@/typings/typings';
 
 export default defineComponent({
   name: 'SwitchButton',
@@ -19,7 +20,7 @@ export default defineComponent({
     mode: {
       type: String,
       required: false,
-      default: 'light',
+      default: 'dark',
     },
     disabled: {
       type: Boolean,
@@ -28,11 +29,11 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const isDark = computed(() => props.mode === 'dark');
+    const isDark = computed(() => props.mode !== ColorTheme.light);
 
     const switchTheme = (e: Event) => {
       e.stopPropagation();
-      context.emit('change', isDark.value ? 'light' : 'dark');
+      context.emit('change', isDark.value ? ColorTheme.light : ColorTheme.dark);
     };
 
     return {
